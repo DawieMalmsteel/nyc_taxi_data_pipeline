@@ -12,14 +12,14 @@ dim_date as (
         extract(year from pickup_date) as year,
         extract(month from pickup_date) as month,
         extract(day from pickup_date) as day,
-        extract(dayofweek from pickup_date) as day_of_week,
-        extract(dayofyear from pickup_date) as day_of_year,
+        extract(dow from pickup_date) as day_of_week,
+        extract(doy from pickup_date) as day_of_year,
         case
-            when extract(dayofweek from pickup_date) in (1, 7) then true
+            when extract(dow from pickup_date) in (0, 6) then true
             else false
         end as is_weekend,
         case
-            when extract(dayofweek from pickup_date) in (1, 7) then 'Weekend'
+            when extract(dow from pickup_date) in (0, 6) then 'Weekend'
             else 'Weekday'
         end as day_type,
         to_char(pickup_date, 'YYYY-MM') as year_month,

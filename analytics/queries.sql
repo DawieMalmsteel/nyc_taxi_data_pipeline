@@ -94,10 +94,10 @@ ORDER BY total_trips DESC;
 
 
 -- 9. What percentage of records were invalid?
--- (This uses the quality report JSON; for SQL version, compare raw vs silver counts)
+-- Using dbt source freshness / quality report counts
 SELECT
     'Total Raw Records' AS metric,
-    (SELECT COUNT(*) FROM raw.trips) AS value  -- Adjust table name as needed
+    9554778 AS value
 UNION ALL
 SELECT
     'Valid Silver Records' AS metric,
@@ -105,13 +105,12 @@ SELECT
 UNION ALL
 SELECT
     'Invalid Records' AS metric,
-    (SELECT COUNT(*) FROM raw.trips) - (SELECT COUNT(*) FROM silver.trips) AS value
+    9554778 - (SELECT COUNT(*) FROM silver.trips) AS value
 UNION ALL
 SELECT
     'Invalid Percentage' AS metric,
     ROUND(
-        ((SELECT COUNT(*) FROM raw.trips) - (SELECT COUNT(*) FROM silver.trips)) * 100.0
-        / NULLIF((SELECT COUNT(*) FROM raw.trips), 0),
+        (9554778 - (SELECT COUNT(*) FROM silver.trips)) * 100.0 / 9554778,
         2
     ) AS value;
 

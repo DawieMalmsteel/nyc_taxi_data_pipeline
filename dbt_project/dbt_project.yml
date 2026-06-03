@@ -19,7 +19,5 @@ models:
   nyc_taxi_pipeline:
     staging:
       +materialized: view
-      +schema: silver
     marts:
       +materialized: table
-      +schema: analytics

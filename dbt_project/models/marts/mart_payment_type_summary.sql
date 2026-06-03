@@ -25,11 +25,11 @@ payment_summary as (
         avg(tip_amount) as avg_tip,
         avg(tip_percentage) as avg_tip_percentage,
         round(
-            count(*) * 100.0 / (select count(*) from trips),
+            (count(*) * 100.0 / (select count(*) from trips))::numeric,
             2
         ) as percentage_of_trips,
         round(
-            sum(total_amount) * 100.0 / (select sum(total_amount) from trips),
+            (sum(total_amount) * 100.0 / (select sum(total_amount) from trips))::numeric,
             2
         ) as percentage_of_revenue
     from trips

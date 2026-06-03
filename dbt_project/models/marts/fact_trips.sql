@@ -41,7 +41,7 @@ fact_trips as (
         end as has_tip,
         case
             when tip_amount > 0 and fare_amount > 0
-            then round(tip_amount / fare_amount * 100, 2)
+            then round((tip_amount / fare_amount * 100)::numeric, 2)
             else 0
         end as tip_percentage
     from trips
