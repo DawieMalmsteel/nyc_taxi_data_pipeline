@@ -1,0 +1,43 @@
+project_name: "nyc-taxi-pipeline"
+taxi_type: "yellow"
+start_month: "2024-01"
+end_month: "2024-03"
+
+download:
+  base_url: "https://d37ci6vzurychx.cloudfront.net/trip-data"
+  zone_lookup_url: "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+
+storage:
+  type: "local"
+  raw_path: "data/raw"
+  silver_path: "data/silver"
+  gold_path: "data/gold"
+  quarantine_path: "data/quarantine"
+
+processing:
+  engine: "spark"
+  output_format: "parquet"
+  partition_by:
+    - pickup_year
+    - pickup_month
+
+quality:
+  enable_checks: true
+  quarantine_invalid_records: true
+  report_path: "data/quality_report.json"
+
+dbt:
+  enabled: true
+  target_database: "postgresql"
+  schema: "analytics"
+  host: "postgres"
+  port: 5432
+  dbname: "nyc_taxi"
+  user: "nyc_user"
+  password: "nyc_password"
+
+optional:
+  airflow: false
+  trino: false
+  kafka_streaming: false
+  debezium_cdc: false

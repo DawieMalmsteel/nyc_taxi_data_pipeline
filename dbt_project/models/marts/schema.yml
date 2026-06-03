@@ -1,0 +1,99 @@
+version: 2
+
+models:
+  - name: dim_zone
+    description: "Taxi zone dimension table"
+    columns:
+      - name: location_id
+        description: "Zone location ID"
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "NYC borough name"
+      - name: zone_name
+        description: "Taxi zone name"
+
+  - name: dim_date
+    description: "Date dimension table"
+    columns:
+      - name: date_key
+        description: "Date value"
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_payment_type
+    description: "Payment type dimension table"
+    columns:
+      - name: payment_type_id
+        description: "Payment type numeric code"
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_trips
+    description: "Fact table with one row per taxi trip"
+    columns:
+      - name: trip_id
+        description: "Unique trip identifier"
+        tests:
+          - unique
+          - not_null
+      - name: pickup_datetime
+        description: "Trip pickup timestamp"
+        tests:
+          - not_null
+      - name: total_amount
+        description: "Total amount charged"
+      - name: fare_amount
+        description: "Fare amount"
+
+  - name: mart_revenue_by_day
+    description: "Daily revenue summary"
+    columns:
+      - name: pickup_date
+        description: "Date of trips"
+        tests:
+          - unique
+          - not_null
+      - name: total_trips
+        description: "Number of trips on this date"
+      - name: total_revenue
+        description: "Total revenue on this date"
+
+  - name: mart_revenue_by_zone
+    description: "Revenue by pickup/dropoff zone"
+    columns:
+      - name: location_id
+        description: "Zone location ID"
+      - name: direction
+        description: "pickup or dropoff"
+      - name: total_trips
+        description: "Total trips for this zone"
+      - name: total_revenue
+        description: "Total revenue for this zone"
+
+  - name: mart_trips_by_hour
+    description: "Trip count and metrics by hour of day"
+    columns:
+      - name: pickup_hour
+        description: "Hour of day (0-23)"
+        tests:
+          - unique
+          - not_null
+      - name: total_trips
+        description: "Total trips at this hour"
+
+  - name: mart_payment_type_summary
+    description: "Revenue and tip summary by payment type"
+    columns:
+      - name: payment_type
+        description: "Payment type code"
+        tests:
+          - unique
+          - not_null
+      - name: total_trips
+        description: "Total trips for this payment type"
+      - name: total_revenue
+        description: "Total revenue for this payment type"

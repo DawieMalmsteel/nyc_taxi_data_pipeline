@@ -1,0 +1,12 @@
+nyc_taxi:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5432
+      user: nyc_user
+      pass: nyc_password
+      dbname: nyc_taxi
+      schema: analytics
+      threads: 4

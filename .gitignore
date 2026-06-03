@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (too large for git)
+data/raw/
+data/silver/
+data/gold/
+data/quarantine/
+data/quality_report.json
+
+# Keep lookup data (small reference file)
+!data/lookup/
+!data/lookup/taxi_zone_lookup.csv
+
+# Docker
+docker-compose.override.yml
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+dbt_project/.user.yml
+
+# Environment / secrets
+.env
+.env.local
+*.pem
+*.key
+
+# Temporary files
+/tmp/
+*.tmp
+*.log

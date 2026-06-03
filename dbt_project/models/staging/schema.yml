@@ -1,0 +1,67 @@
+version: 2
+
+sources:
+  - name: silver
+    schema: silver
+    tables:
+      - name: trips
+        description: "Cleaned yellow taxi trip records from Spark processing"
+        columns:
+          - name: trip_id
+            description: "Unique trip identifier (SHA-256 hash)"
+            tests:
+              - unique
+              - not_null
+
+  - name: raw
+    schema: raw
+    tables:
+      - name: zone_lookup
+        description: "NYC taxi zone lookup table"
+
+models:
+  - name: stg_trips
+    description: "Staging model for cleaned taxi trip records"
+    columns:
+      - name: trip_id
+        description: "Unique trip identifier"
+        tests:
+          - unique
+          - not_null
+      - name: pickup_datetime
+        description: "Trip pickup timestamp"
+        tests:
+          - not_null
+      - name: dropoff_datetime
+        description: "Trip dropoff timestamp"
+        tests:
+          - not_null
+      - name: pickup_date
+        description: "Date of trip pickup"
+        tests:
+          - not_null
+      - name: pickup_hour
+        description: "Hour of trip pickup (0-23)"
+      - name: trip_distance
+        description: "Trip distance in miles"
+        tests:
+          - not_null
+      - name: fare_amount
+        description: "Fare amount in USD"
+      - name: total_amount
+        description: "Total amount charged in USD"
+      - name: passenger_count
+        description: "Number of passengers"
+
+  - name: stg_zones
+    description: "Staging model for taxi zone lookup"
+    columns:
+      - name: location_id
+        description: "Zone location ID"
+        tests:
+          - unique
+          - not_null
+      - name: borough
+        description: "NYC borough name"
+      - name: zone_name
+        description: "Taxi zone name"
