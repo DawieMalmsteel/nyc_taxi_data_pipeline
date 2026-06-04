@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS raw.zone_lookup (
     service_zone TEXT
 );
 
--- Create silver trips table (will be populated by Spark + dbt)
+-- Create silver trips table (will be populated by cleaning job + load script)
+-- NOTE: PRIMARY KEY constraint added AFTER bulk load for performance
 CREATE TABLE IF NOT EXISTS silver.trips (
-    trip_id TEXT PRIMARY KEY,
+    trip_id TEXT,
     ingestion_ts TIMESTAMP,
     source_file TEXT,
     tpep_pickup_datetime TIMESTAMP,

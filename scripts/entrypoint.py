@@ -5,8 +5,10 @@ Docker entrypoint: run the full pipeline in order.
 2. Download data
 3. Run cleaning job
 4. Load data into PostgreSQL
-5. Run dbt models
-6. Print summary
+5. Run post-load optimization (indexes, constraints)
+6. Run dbt models
+7. Export gold parquet
+8. Print summary
 """
 
 import sys
@@ -104,7 +106,11 @@ def main():
         if not run_step("Load to PostgreSQL", [sys.executable, "scripts/load_to_postgres.py"]):
             sys.exit(1)
 
-    # 5. Run dbt
+    # 5. Run post-load optimization (add indexes, constraints)
+    if not run_step("Post-Load Optimization", [sys.executable, "scripts/run_post_load_optimize.py"]):
+        print("WARNING: Post-load optimization failed, but pipeline continues.")
+
+    # 6. Run dbt
     dbt_args = ["--project-dir", "/app/dbt_project", "--profiles-dir", "/app/dbt_project"]
     if not run_step("dbt deps", ["dbt", "deps"] + dbt_args):
         sys.exit(1)
@@ -113,11 +119,11 @@ def main():
     if not run_step("dbt test", ["dbt", "test"] + dbt_args):
         print("WARNING: Some dbt tests failed, but pipeline continues.")
 
-    # 6. Export gold layer
+    # 7. Export gold layer
     if not run_step("Export Gold Parquet", [sys.executable, "scripts/export_gold.py"]):
         print("WARNING: Gold export failed, but pipeline continues.")
 
-    # 7. Summary
+    # 8. Summary
     print("\n" + "=" * 60)
     print("PIPELINE COMPLETE")
     print("=" * 60)
